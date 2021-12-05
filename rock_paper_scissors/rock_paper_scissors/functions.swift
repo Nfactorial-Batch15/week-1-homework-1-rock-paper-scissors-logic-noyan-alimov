@@ -56,16 +56,26 @@ func getPlayerShapes() throws -> [Shape] {
     throw GameError.noShapes
 }
 
-func getWinner(player1: PlayerProtocol, player2: PlayerProtocol) -> String {
-    if player1.shape == player2.shape {
-        return "Draw"
+func unwrapShape(shape: Shape?) throws -> Shape {
+    guard let shape = shape else { throw GameError.unwrapShapeError }
+    return shape
+}
+
+func getWinner(player1: PlayerProtocol, player2: PlayerProtocol) throws -> String {
+    do {
+        let shape1 = try unwrapShape(shape: player1.shape)
+        let shape2 = try unwrapShape(shape: player2.shape)
+        
+        if shape1 > shape2 {
+            return player1.name
+        } else if shape1 < shape2 {
+            return player2.name
+        } else {
+            return "Draw"
+        }
+    } catch {
+        throw error
     }
-    
-    if player1.shape == .rock && player2.shape == .scissors || player1.shape == .scissors && player2.shape == .paper || player1.shape == .paper && player2.shape == .rock {
-        return player1.name
-    }
-    
-    return player2.name
 }
 
 func getYesOrNo(value: String) throws -> Bool {

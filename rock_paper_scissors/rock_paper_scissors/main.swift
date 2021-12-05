@@ -19,7 +19,7 @@ func playGame() {
         player1.shape = shapes[0]
         player2.shape = shapes[1]
         
-        let winner = getWinner(player1: player1, player2: player2)
+        let winner = try getWinner(player1: player1, player2: player2)
         
         print("Winner is \(winner)")
         
